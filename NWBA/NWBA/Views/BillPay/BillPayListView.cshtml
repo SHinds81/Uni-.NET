@@ -1,0 +1,73 @@
+﻿@model IEnumerable<NWBA.Models.BillPay>
+
+@{
+    ViewData["Title"] = "Bills";
+}
+
+<h1>Bills</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PayeeID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Period)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifyDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PayeeID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScheduleDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Period)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifyDate)
+            </td>
+            <td>
+                @if (item.ScheduleDate > DateTime.Now && item.Status == Status.SCHEDULED)
+                {
+                    <a asp-action="EditBillPay" asp-route-id="@item.BillPayID" class="btn btn-primary" disabled>Edit</a>
+                }
+                else
+                {
+                    //<a asp-action="EditBillPay" asp-route-id="@item.BillPayID" class="btn btn-primary">Edit</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,61 @@
+@model Login
+@{
+
+    ViewData["Title"] = "Home";
+}
+@using Microsoft.AspNetCore.Http
+
+<div>
+    <div class="text-center">
+        <h1 class="h1">National Wealth Bank of Australasia</h1>
+    </div>
+    <div class="text-center">
+        <img src="~/images/NWBAlogo.png" alt="bank" />
+    </div>
+</div>
+<hr />
+<br />
+<br />
+
+@{
+    var isLoggedIn = Context.Session.GetInt32(nameof(Customer.CustomerID)).HasValue;
+}
+@if (!isLoggedIn)
+{
+
+    <h1 class="h2" style="text-align: center;">Login</h1>
+    <div class="row" align="center">
+        <div style="vertical-align:middle; margin: 0 auto; text-align: center; display: inline-block" align="center" >
+            <form asp-controller="Home" asp-action="Login" style="vertical-align:middle; text-align: center;">
+                <div class="form-group" style="vertical-align:middle; text-align: center;">
+                    <label asp-for="LoginID" class="control-label"></label>
+                    <input asp-for="LoginID" class="form-control" />
+                    @Html.ValidationMessage("Login", new { @class = "text-danger" })
+                    <span asp-validation-for="LoginID" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="vertical-align:middle; text-align: center;">
+                    <label for="Password" class="control-label">Password</label>
+                    <input id="Password" name="Password" type="password" class="form-control"
+                           data-val="true" data-val-required="The Password field is required." />
+                </div>
+                <div class="form-group" style="        vertical-align: middle;
+        text-align: center;
+">
+                    <input type="submit" value="Login" class="btn btn-primary" style="vertical-align:middle; text-align: center;" />
+                </div>
+                @Html.ValidationMessage("LoginFailed", new { @class = "text-danger" })
+            </form>
+        </div>
+    </div>
+
+
+        }
+        else
+        {
+        <h1 class="display-4">Welcome @Context.Session.GetString(nameof(Customer.Name))</h1>
+        }
+        @section Scripts {
+            @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+        }
+
+

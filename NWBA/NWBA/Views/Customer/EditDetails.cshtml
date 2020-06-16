@@ -1,0 +1,62 @@
+﻿@model NWBA.Models.Customer
+
+@{
+    ViewData["Title"] = "Edit Customer Details";
+}
+
+<h1>View</h1>
+
+<h4>Customer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditDetails">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CustomerID" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                @Html.ValidationMessage("Name", new { @class = "text-danger" })
+                <!--    <span asp-validation-for="Name" class="text-danger"></span> -->
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxFileNumber" class="control-label"></label>
+                <input asp-for="TaxFileNumber" class="form-control" />
+                @Html.ValidationMessage("TaxFileNumber", new { @class = "text-danger" })
+                <!-- <span asp-validation-for="TaxFileNumber" class="text-danger"></span> -->
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                @Html.ValidationMessage("Address", new { @class = "text-danger" })
+                <!--<span asp-validation-for="Address" class="text-danger"></span> -->
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                @Html.ValidationMessage("City", new { @class = "text-danger" })
+                <!--<span asp-validation-for="City" class="text-danger"></span>-->
+            </div>
+            <div class="form-group">
+                <label asp-for="PostCode" class="control-label"></label>
+                <input asp-for="PostCode" class="form-control" />
+                @Html.ValidationMessage("PostCode", new { @class = "text-danger" })
+                <!--<span asp-validation-for="PostCode" class="text-danger"></span>-->
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                @Html.ValidationMessage("Phone", new { @class = "text-danger" })
+                <!--<span asp-validation-for="Phone" class="text-danger"></span>-->
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<a asp-controller="Customer" asp-action="ChangePassword" class="btn btn-primary">Change Password</a>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -1,0 +1,52 @@
+﻿@model NWBA.ViewModels.BillPayViewModel
+
+@{
+    ViewData["Title"] = "Pay New Bill";
+}
+
+<h1>Pay New Bill</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateBillPay">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BillPay.BillPayID" />
+            <div class="form-group">
+                <label asp-for="BillPay.AccountNumber" class="control-label"></label>
+                <select asp-for="BillPay.AccountNumber" class="form-control" asp-items="Model.Accounts"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.PayeeID" class="control-label"></label>
+                <input asp-for="BillPay.PayeeID" class="form-control" />
+                @Html.ValidationMessage("PayeeID", new { @class = "text-danger" })
+                <span asp-validation-for="BillPay.PayeeID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.Amount" class="control-label"></label>
+                <input asp-for="BillPay.Amount" class="form-control" />
+                @Html.ValidationMessage("Amount", new { @class = "text-danger" })
+                <span asp-validation-for="BillPay.Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.ScheduleDate" class="control-label"></label>
+                <input asp-for="BillPay.ScheduleDate" class="form-control" />
+                @Html.ValidationMessage("ScheduleDate", new { @class = "text-danger" })
+                <span asp-validation-for="BillPay.ScheduleDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.Period" class="control-label"></label>
+                @Html.ValidationMessage("Period", new { @class = "text-danger" })
+                <select asp-for="BillPay.Period" class="form-control" asp-items="Model.Types"></select>
+            </div>
+            <input type="hidden" asp-for="BillPay.ModifyDate" />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

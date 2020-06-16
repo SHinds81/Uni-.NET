@@ -1,0 +1,75 @@
+﻿@model NWBA_Admin.EditCustomerViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<h4>CustomerDto</h4>
+@{
+    CustomerDto cust = Model.Customer;
+}
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditCustomer">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Customer.CustomerID" class="control-label"></label>
+                <input asp-for="Customer.CustomerID" class="form-control" />
+                <span asp-validation-for="Customer.CustomerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Name" class="control-label"></label>
+                <input asp-for="Customer.Name" class="form-control" />
+                <span asp-validation-for="Customer.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.TaxFileNumber" class="control-label"></label>
+                <input asp-for="Customer.TaxFileNumber" class="form-control" />
+                <span asp-validation-for="Customer.TaxFileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Address" class="control-label"></label>
+                <input asp-for="Customer.Address" class="form-control" />
+                <span asp-validation-for="Customer.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.City" class="control-label"></label>
+                <input asp-for="Customer.City" class="form-control" />
+                <span asp-validation-for="Customer.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.PostCode" class="control-label"></label>
+                <input asp-for="Customer.PostCode" class="form-control" />
+                <span asp-validation-for="Customer.PostCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Phone" class="control-label"></label>
+                <input asp-for="Customer.Phone" class="form-control" />
+                <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LoginStatus" class="control-label"></label>
+                <select asp-for="LoginStatus" class="form-control" asp-items="Model.LoginStatusTypes" id="loginSelection"></select>
+            </div>
+            <div class="form-group" id="lockedUntil" hidden>
+                <label asp-for="LockedUntil" class="control-label"></label>
+                <input asp-for="LockedUntil" class="form-control" />
+                <span asp-validation-for="LockedUntil" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ViewCustomers">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,60 @@
+﻿@model NWBA_Admin.ViewModels.BillPayViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>BillPayDto</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BillPay.BillPayID" />
+            <div class="form-group">
+                <label asp-for="BillPay.AccountNumber" class="control-label"></label>
+                <input asp-for="BillPay.AccountNumber" class="form-control" />
+                <span asp-validation-for="BillPay.AccountNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.PayeeID" class="control-label"></label>
+                <input asp-for="BillPay.PayeeID" class="form-control" />
+                <span asp-validation-for="BillPay.PayeeID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.Amount" class="control-label"></label>
+                <input asp-for="BillPay.Amount" class="form-control" />
+                <span asp-validation-for="BillPay.Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.ScheduleDate" class="control-label"></label>
+                <input asp-for="BillPay.ScheduleDate" class="form-control" />
+                <span asp-validation-for="BillPay.ScheduleDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.Status" class="control-label"></label>
+                <select asp-for="BillPay.Status" asp-items="Model.StatusList" class="form-control"></select>
+                <span asp-validation-for="BillPay.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillPay.Period" class="control-label"></label>
+                <select asp-for="BillPay.Period" asp-items="Model.PeriodList" class="form-control"></select>
+                <span asp-validation-for="BillPay.Period" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="BillPay.ModifyDate" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

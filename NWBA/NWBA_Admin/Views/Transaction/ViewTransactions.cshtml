@@ -1,0 +1,285 @@
+﻿@using System.Linq;
+@model NWBA_Admin.ViewModels.SearchTransactionsViewModel;
+
+@{
+    ViewData["Title"] = "ViewTransactions";
+}
+
+<h1>Search Transactions</h1>
+<style>
+    .wrapper {
+        height: 100%;
+        width: 100%;
+        display: flex;
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ViewTransactions">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CustomerID" class="control-label"></label>
+                <input asp-for="CustomerID" class="form-control" />
+                <span asp-validation-for="CustomerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FromDate" class="control-label"></label>
+                <input asp-for="FromDate" class="form-control" />
+                <span asp-validation-for="FromDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToDate" class="control-label"></label>
+                <input asp-for="ToDate" class="form-control" />
+                <span asp-validation-for="ToDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+<br />
+
+@if (Model.Transactions.Count > 0)
+{
+    <h1>Administration Charts</h1>
+    <div class="wrapper">
+        <script src="~/js/Chart.bundle.js"></script>
+        <script src="~/js/moment.js"></script>
+
+
+        <!--Count all the transactions (individual transactions, not values, so 3 deposits, 4 ATMs, etc)
+        and their types -->
+        <!--<p></p>
+        <h4>Frequency of Transaction Types</h4>-->
+        <canvas id="doughnutfrequencyoftransactiontypes" canvas style="        width: 256px;
+            height: 256px
+            "></canvas>
+        <script>
+
+            var deposits = parseInt(@Model.Transactions.Where(x => x.Type == TransactionType.Deposit).Count());
+            var withdrawals = parseInt(@Model.Transactions.Where(x => x.Type == TransactionType.Withdraw).Count());
+            var transfers = parseInt(@Model.Transactions.Where(x => x.Type == TransactionType.Transfer).Count());
+            var serviceCharges = parseInt(@Model.Transactions.Where(x => x.Type == TransactionType.ServiceCharge).Count());
+            var bill = parseInt(@Model.Transactions.Where(x => x.Type == TransactionType.BillPay).Count());
+
+        new Chart(document.getElementById("doughnutfrequencyoftransactiontypes"), {
+            type: 'doughnut',
+            data: {
+                /*
+            Deposit = 1,
+            Withdraw = 2,
+            Transfer = 3,
+            ServiceCharge = 4,
+            BillPay = 5,
+                */
+                labels: ["Deposits", "ATM Withdrawals", "Account Transfers", "Service Charges", "BillPay Paid"],
+                datasets: [
+                    {
+                        label: "Transactions",
+                        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+
+                        data: [deposits, withdrawals, transfers, serviceCharges, bill]
+                    }
+                ]
+            },
+            options: {
+                cutoutPercentage: 30,
+                responsive: false,
+                title: {
+                    display: false,
+                    text: 'Transactions By Type'
+                }
+            }
+        });
+        </script>
+
+
+        <!--Loop grabs all the data and formats as the "x,y" system below and inserts it.
+        Data is just transaction values (excluding deposits) and dates-->
+        <!--<p></p>
+        <h4>Transactions by time and value</h4>-->
+        <canvas id="myChart3" width="256" height="256"></canvas>
+        <script>
+        var data = [
+            @foreach(TransactionDto transaction in Model.Transactions)
+            {
+            <text>
+            {x: new Date(@transaction.TransactionTime.Year, @transaction.TransactionTime.Month, @transaction.TransactionTime.Day),
+            y: parseFloat(@transaction.Amount)},
+            </text>
+            }
+        ];
+    var ctx3 = document.getElementById('myChart3');
+    var myChart3 = new Chart(ctx3, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Time & Date',
+                data: data,
+                backgroundColor: "Red",
+            }]
+        },
+        options: {
+            responsive: false,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        displayFormats: {
+                            'millisecond': 'h:mm:ss MMM DD YYYY',
+                            'second': 'h:mm:ss MMM DD YYYY',
+                            'minute': 'h:mm:ss MMM DD YYYY',
+                            'hour': 'h:mm:ss MMM DD YYYY',
+                            'day': 'h:mm:ss MMM DD YYYY',
+                            'week': 'h:mm:ss MMM DD YYYY',
+                            'month': 'h:mm:ss MMM DD YYYY',
+                            'quarter': 'h:mm:ss MMM DD YYYY',
+                            'year': 'h:mm:ss MMM DD YYYY',
+                        }
+                    }
+                }]
+            }
+        }
+    });
+        </script>
+
+
+        <!--Get and add all withdrawals (all types, values) to see total value of withdrawals by type -->
+        <!--<p></p>
+            <h4>Accounts withdrawal value comparison</h4>
+            -->
+        <canvas id="baraccountswithdrawalcomp" canvas style="width: 256px; height: 256px"></canvas>
+        <script>
+
+            @{
+                int account4100withdrawals = (int)Model.Transactions.Where(x => x.AccountNumber == 4100).Where(x => x.Type == TransactionType.Withdraw).Sum(x => x.Amount);
+                int account4101withdrawals = (int)Model.Transactions.Where(x => x.AccountNumber == 4101).Where(x => x.Type == TransactionType.Withdraw).Sum(x => x.Amount);
+                int account4200withdrawals = (int)Model.Transactions.Where(x => x.AccountNumber == 4200).Where(x => x.Type == TransactionType.Withdraw).Sum(x => x.Amount);
+                int account4300withdrawals = (int)Model.Transactions.Where(x => x.AccountNumber == 4300).Where(x => x.Type == TransactionType.Withdraw).Sum(x => x.Amount);
+                int account4301withdrawals = (int)Model.Transactions.Where(x => x.AccountNumber == 4301).Where(x => x.Type == TransactionType.Withdraw).Sum(x => x.Amount);
+            }
+
+            var account4100withdrawals = parseInt(@account4100withdrawals);
+            var account4101withdrawals = parseInt(@account4101withdrawals);
+            var account4200withdrawals = parseInt(@account4200withdrawals);
+            var account4300withdrawals = parseInt(@account4300withdrawals);
+            var account4301withdrawals = parseInt(@account4301withdrawals);
+
+        var ctx = document.getElementById('baraccountswithdrawalcomp');
+        var baraccountswithdrawalcomp = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["4100", "4101", "4200", "4300", "4301"],
+                datasets: [{
+                    label: 'Total $',
+                    data: [account4100withdrawals, account4101withdrawals, account4200withdrawals, account4300withdrawals, account4301withdrawals],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        </script>
+    </div>
+
+    <br />
+    <br />
+
+}
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction.TransactionID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction.AccountNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction.DestinationAccountNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction.TransactionTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction.ModifyTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Transactions)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DestinationAccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModifyTime)
+                </td>
+                <td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
